@@ -51,7 +51,7 @@ if (TRUE) {
 
 
 #----motif mutation growth curve----
-if (TRUE) {
+if (FALSE) {
     data_control <- filter(od_long, meaning %in% c("positive_control", "negative_control")) %>%
         subset(select = -c(RNA, Protein, meaning))
     data_figure <- od_long[!(is.na(od_long$layout)), ] %>%
@@ -90,7 +90,7 @@ if (TRUE) {
     color_all <- color_figure
     color_all[names(color_control)] <- color_control
     #----growth curve----
-    if (TRUE) {
+    if (FALSE) {
         p_1 <- ggplot(
             data = data_figure,
             aes(x = time, y = value, group = well, color = plasmidid, alpha = replicate)
@@ -117,7 +117,7 @@ if (TRUE) {
     }
 }
 #----motif mutation logistic regression----
-if (FALSE) {
+if (TRUE) {
     data_figure <- gr_lg[!(is.na(gr_lg$layout)), ] %>%
         mutate(meaning = factor(meaning, c("WT", "HEXIM1_ILAA", "7SK_m1")))
     data_figure$plasmid_type <- paste(data_figure$meaning, data_figure$layout)
@@ -142,15 +142,18 @@ if (FALSE) {
     }
     #----bar_t----
     # odmax
-    if (FALSE) {
+    if (TRUE) {
         odmax_mut_bar <- ggplot(data_figure, aes(x = meaning, y = od_max, fill = plasmid_type)) +
             facet_wrap(~layout, scales = "free_x", nrow = 1) +
             stat_summary(fun = mean, geom = "bar", width = 0.6) + # 绘制条状图
             stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2) + # 添加误差线 (标准误)
             scale_fill_manual(values = color_figure) +
-            labs(y = expression(OD[600]), title = expression(
-                "T-test: " * H[0] * ":" * OD600[max["1"]] * "=" * OD600[max["2"]]
-            )) +
+            labs(
+                x = "Negative mutation type", y = expression(OD[600]),
+                title = expression(
+                    "T-test: " * H[0] * ":" * OD600[max["1"]] * "=" * OD600[max["2"]]
+                )
+            ) +
             theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
         for (i in unique(data_figure$layout)) {
             odmax_mut_bar <- odmax_mut_bar +
@@ -174,9 +177,12 @@ if (FALSE) {
             stat_summary(fun = mean, geom = "bar", width = 0.6) + # 绘制条状图
             stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2) + # 添加误差线 (标准误)
             scale_fill_manual(values = color_figure) +
-            labs(y = expression(OD[600]), title = expression(
-                "T-test: " * H[0] * ":" * OD600[max["1"]] * "=" * OD600[max["2"]]
-            )) +
+            labs(
+                y = expression(OD[600]),
+                title = expression(
+                    "T-test: " * H[0] * ":" * OD600[max["1"]] * "=" * OD600[max["2"]]
+                )
+            ) +
             theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
         for (i in unique(data_figure$meaning)) {
             odmax_mut_bar2 <- odmax_mut_bar2 +
@@ -260,7 +266,7 @@ if (FALSE) {
         cat(crayon::green("Plot growth_rate_single_bar2 saved successfully.\n"))
     }
     #---heatmap_MaV----
-    if (TRUE) {
+    if (FALSE) {
         if (TRUE) {
             heatmap_MaV <- function(data_hp = data_hp, variable = variable, rname = rname, cname = cname, type = type, width = 8, height = 8) {
                 name_variable <- as_name(ensym(variable))

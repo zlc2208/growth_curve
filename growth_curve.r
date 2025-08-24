@@ -34,10 +34,7 @@ if (file.exists(paste(
         filter(row.names(data_od) %in% label$well[label$plasmid == "blank"]) %>%
         summarise(across(where(is.numeric), mean)) %>%
         as.numeric()
-      real_od <- t(apply(data_od, 1, function(i) {
-        i - OD_0
-      })) %>%
-        data.frame()
+      real_od <- t(apply(data_od, 1, function(i) {i - OD_0})) %>% data.frame()
       colnames(real_od) <- colnames(data_od) # 恢复列名
       real_od <- rownames_to_column(real_od, var = "well")
       od_melt <- merge(real_od, label, by = "well")
@@ -51,14 +48,9 @@ if (file.exists(paste(
         names_transform = list(time = as.numeric),
         values_transform = list(value = as.numeric)
       )
-      od_long$time <- sapply(od_long$time, function(x) {
-        x / 6
-      })
+      od_long$time <- sapply(od_long$time, function(x) {x / 6})
       od_long$value[od_long$value < 0] <- 0
-      dir.create(paste(
-        "output_", date,
-        sep = ""
-      ), showWarnings = FALSE, recursive = TRUE)
+      dir.create(paste("output_", date,sep = ""), showWarnings = FALSE, recursive = TRUE)
       write_xlsx(od_long,
         path = paste("output_", date, "/od_long_", date, ".xlsx", sep = "")
       )
